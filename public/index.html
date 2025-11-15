@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sensor Dashboard</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    #data { font-size: 1.5em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Live Sensor Data</h1>
+  <div id="data">Waiting for data...</div>
+
+  <script>
+    const ws = new WebSocket("ws://192.168.56.1:3000");
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      document.getElementById("data").innerHTML =
+        `🌡️ Temperature: ${data.temperature} °C<br>💧 Humidity: ${data.humidity} %`;
+    };
+  </script>
+</body>
+</html>
