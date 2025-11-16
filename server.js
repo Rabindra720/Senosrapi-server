@@ -77,7 +77,7 @@ app.get('/api/readings', (req, res) => {
 app.get('/api/latest', (req, res) => {
   db.get('SELECT * FROM readings ORDER BY timestamp DESC LIMIT 1', [], (err, row) => {
     if (err) return res.status(500).send('DB error');
-    res.json(row);
+    res.json(row || {}); // ✅ Always return valid JSON
   });
 });
 

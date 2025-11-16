@@ -54,15 +54,21 @@
   <script>
     // Show latest reading on page load
     fetch("/api/latest")
-      .then(res => res.json())
-      .then(data => {
+      .then(res => res.text())
+      .then(text => {
+        if (!text) {
+          console.warn("No data returned from /api/latest");
+          return;
+        }
+        const data = JSON.parse(text);
         if (data && data.temperature !== undefined) {
           document.getElementById("data").innerHTML =
             `🕒 ${new Date().toLocaleTimeString()}<br>
              🌡️ Temperature: ${data.temperature} °C<br>
              💧 Humidity: ${data.humidity} %`;
         }
-      });
+      })
+      .catch(err => console.error("Error fetching latest data:", err));
 
     // Connect to WebSocket for live updates
     const ws = new WebSocket("wss://" + window.location.host);
